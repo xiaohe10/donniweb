@@ -165,11 +165,40 @@ app.get('/patient', function (req, res) {
                         var currEmo = JSON.parse(usernew.allEmotions);
                         emotiongraphs = groups[groupid-1].emotiongraphs;
                         var anxiety_trend = [];
+                        var disgust_trend = [];
+                        var sorrow_trend = [];
+                        var surprise_trend = [];
+                        var anger_trend = [];
+                        var fear_trend = [];
+                        var depress_trend = [];
+                        var tired_trend=[];
+
                         for(var k = 0; k < emotiongraphs.length;k++){
                             anxiety_trend.push(emotiongraphs[k].anxiety);
+                            disgust_trend.push(emotiongraphs[k].disgust);
+                            sorrow_trend.push(emotiongraphs[k].sorrow);
+                            surprise_trend.push(emotiongraphs[k].surprise);
+                            anger_trend.push(emotiongraphs[k].anger);
+                            fear_trend.push(emotiongraphs[k].fear);
+                            depress_trend.push(emotiongraphs[k].depress);
+                            tired_trend.push(emotiongraphs[k].tired);
+                        }
+                        var heart_mistakes = [];
+                        var groupecg = groups[groupid-1].ecg;
+                        for(var t =0 ; t < groupecg.length;t++){
+                            var mis = groupecg[t].ecgDiagnosis;
+                            mis = JSON.parse(mis);
+                            heart_mistakes.push(mis.ecgDiagnosis)
                         }
                         bingtudata = [currEmo.joy,currEmo.clam,currEmo.fear,currEmo.disgust,currEmo.anger,currEmo.surprise,currEmo.sorrow];
-                        res.render('patient',{'anxiety_trend':anxiety_trend,'groups':groups,'bingtudata':bingtudata,'curr_group':groups[groupid-1],'usernews':usernews,'user':user,'username':username,'groupid':groupid});
+                        res.render('patient',{'anxiety_trend':anxiety_trend,
+                            "sorrow_trend":sorrow_trend,
+                            surprise_trend:surprise_trend,
+                            anger_trend:anger_trend,
+                            fear_trend:fear_trend,
+                            depress_trend:depress_trend,
+                            "tired_trend":tired_trend,
+                            disgust_trend:disgust_trend,heart_mistakes:heart_mistakes,'groups':groups,'bingtudata':bingtudata,'curr_group':groups[groupid-1],'usernews':usernews,'user':user,'username':username,'groupid':groupid});
                     });
                 }
             });

@@ -16,6 +16,13 @@
     <script>
         var bingtudata = JSON.parse("[<%=bingtudata%>]");
         var anxiety_trend = JSON.parse("[<%=anxiety_trend%>]");
+        var disgust_trend = JSON.parse("[<%=disgust_trend%>]");
+        var sorrow_trend = JSON.parse("[<%=sorrow_trend%>]");
+        var surprise_trend = JSON.parse("[<%=surprise_trend%>]");
+        var anger_trend = JSON.parse("[<%=anger_trend%>]");
+        var fear_trend = JSON.parse("[<%=fear_trend%>]");
+        var depress_trend = JSON.parse("[<%=depress_trend%>]");
+        var tired_trend = JSON.parse("[<%=tired_trend%>]");
 
     </script>
    
@@ -80,18 +87,7 @@
     <!--<button onclick="restart()">重新开始</button>-->
 
     <div class="col-md-6">
-        <div class="panel panel-default" style="margin-top:30px;">
-            <div class="panel-heading">
-                <h3 class="panel-title">心率异常情况</h3>
-            </div>
-            <div class="panel-body">
 
-                <div id="ChartDiv1" style="width: 500px; height: 300px;"></div>
-                <h4>
-                    心脏早搏
-                </h4>
-            </div>
-        </div>
         <div class="panel panel-default" style="margin-top:30px;">
             <div class="panel-heading">
                 <h3 class="panel-title">综合情况</h3>
@@ -130,6 +126,21 @@
                 </div>
 
 
+            </div>
+        </div>
+
+        <div class="panel panel-default" style="margin-top:30px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">心率异常情况</h3>
+            </div>
+            <div class="panel-body">
+
+                <div id="ChartDiv1" style="width: 500px; height: 300px;"></div>
+                <h4>
+                    <% heart_mistakes.forEach(function(heart_mis){%>
+                    <%=heart_mis%><br/>
+                    <% });%>
+                </h4>
             </div>
         </div>
 
