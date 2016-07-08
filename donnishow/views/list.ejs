@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex">
+
+    <title>懂你-医生端</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/static/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="/static/js/jchartfx/jquery.js"></script>
+    <script src="/static/js/bootstrap/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">懂你-医生端</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/list">患者列表 <span class="sr-only">(current)</span></a></li>
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">医生账户<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/logout">登出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="row">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th> 病人姓名 </th>
+                <th> 链接  </th>
+                <th> 管理 </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>02</td>
+            <td>郭藏燃</td>
+                <td><a href="/patient?username=17701092671">患者信息</a></td>
+                <td><a href="/removePatient">删除</a></td>
+            </tr>
+            <tr>
+                <td>02</td>
+                <td>郭藏燃donni</td>
+                <td><a href="/patient?username=oM8eBsxaqdy">患者信息</a></td>
+                <td><a href="/removePatient">删除</a></td>
+            </tr>
+            <tr>
+                <td>02</td>
+                <td>韩浩</td>
+                <td><a href="/patient?username=oM8eBs1nCN4">患者信息</a></td>
+                <td><a href="/removePatient">删除</a></td>
+            </tr>
+            </tbody>
+            </table>
+    </div>
+</div>
+
+</body>
+</html>

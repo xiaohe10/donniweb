@@ -1,0 +1,38 @@
+#chart .Title {
+    font-size: 16px;
+}
+
+#chart .Border 
+{
+    fill: #000000;
+}        
+
+#chart .Attribute0Line {
+    stroke: #00E402;
+    stroke-width: 2;
+}
+
+#chart .AxisY_Text
+{
+    fill: #02592F;
+}
+
+#chart .AxisY_Major
+{
+    stroke: #02592F;
+}
+
+#chart .AxisX_Line
+{
+    stroke-width: 0;
+}
+
+#chart .AxisX_Major
+{
+    stroke: #02592F;
+}
+
+#chart .AxisX_Text
+{
+    fill: transparent;
+}
