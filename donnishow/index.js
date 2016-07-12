@@ -117,7 +117,7 @@ app.get('/patient', function (req, res) {
                         }
                     }
 
-                    console.log(usernew.pending_date);
+                    // console.log(usernew.pending_date);
                 }
                 if(groupStartIndex != groupEndIndex ){
                     var newarray  = emotiongraphs.slice();
@@ -129,11 +129,11 @@ app.get('/patient', function (req, res) {
                     groups.push({"emotiongraphs":newarray,"start":groupStartIndex,'end':groupEndIndex,'starttime':timeformat(pretime),'endtime':timeformat(endtime),'lefttime':pretime,'rightime':endtime});
                 }
                 groups = groups.slice(0,5).reverse();
-                console.log(groups);
+                // console.log(groups);
                 for(var i = 0; i < groups.length;i++){
                     var group = groups[i];
                     group.ecg = [];
-                    console.log(group.starttime,'-',group.endtime);
+                    // console.log(group.starttime,'-',group.endtime);
                 }
                 if(groups.length==0){
                     groupid = 0;
@@ -141,11 +141,11 @@ app.get('/patient', function (req, res) {
                 }else{
                     ecgstarttime = groups[0].lefttime;
                     ecgendtime = groups[groups.length-1].rightime;
-                    console.log('ecgstarttime:',ecgstarttime,'ecgendtime:',ecgendtime);
+                    // console.log('ecgstarttime:',ecgstarttime,'ecgendtime:',ecgendtime);
                     var Ecg = db.collection('ecgs');
                     Ecg.find({"date":{$gt: ecgstarttime, $lt: ecgendtime}}).sort({'_id':-1}).toArray(function(err,ecgs){
                         for(var i =0; i < ecgs.length;i++){
-                            console.log(user.nickname,' 心电异常 ',i, ecgs[i].ecgDiagnosis,ecgs[i].date,ecgs[i].ecg);
+                            // console.log(user.nickname,' 心电异常 ',i, ecgs[i].ecgDiagnosis,ecgs[i].date,ecgs[i].ecg);
                             for(var j =0; j < groups.length;j ++){
                                 if(ecgs[i].date<= groups[j].rightime && ecgs[i].date >= groups[j].lefttime){
                                     groups[j].ecg.push(ecgs[i]);
@@ -188,7 +188,7 @@ app.get('/patient', function (req, res) {
                         for(var t =0 ; t < groupecg.length;t++){
                             var mis = groupecg[t].ecgDiagnosis;
                             mis = JSON.parse(mis);
-                            heart_mistakes.push(mis.ecgDiagnosis)
+                            heart_mistakes.push({ecgDiagnosis:mis.ecgDiagnosis,time:mis.date})
                         }
                         bingtudata = [currEmo.joy,currEmo.clam,currEmo.fear,currEmo.disgust,currEmo.anger,currEmo.surprise,currEmo.sorrow];
                         res.render('patient',{'anxiety_trend':anxiety_trend,
