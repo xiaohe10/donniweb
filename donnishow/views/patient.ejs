@@ -12,8 +12,10 @@
    <script type="text/javascript" src="/static/js/sample.js"></script>
     <script src="/static/js/Chart.js"></script>
     <script src="/static/js/mychart.js"></script>
+    <script src="/static/js/jquery.canvasjs.min.js"></script>
     <script src="/static/js/bootstrap/js/bootstrap.min.js"></script>
     <script>
+        <% if(!message){%>
         var bingtudata = JSON.parse("[<%=bingtudata%>]");
         var anxiety_trend = JSON.parse("[<%=anxiety_trend%>]");
         var disgust_trend = JSON.parse("[<%=disgust_trend%>]");
@@ -23,12 +25,14 @@
         var fear_trend = JSON.parse("[<%=fear_trend%>]");
         var depress_trend = JSON.parse("[<%=depress_trend%>]");
         var tired_trend = JSON.parse("[<%=tired_trend%>]");
+        <%}%>
 
     </script>
    
 </head>
 <body>
 <div class="container">
+
 
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -62,6 +66,7 @@
     </nav>
 
     <div class="col-md-12">
+        <% if(!message){%>
         <nav>
             <ul class="pagination">
                 <!--<li>-->
@@ -104,8 +109,7 @@
                 <h3 class="panel-title">情绪饼图</h3>
             </div>
             <div class="panel-body">
-
-                <div style="width: 400px; height: 400px; margin:0 auto;"><canvas id="bingtuchart" width="400" height="400"></canvas></div>
+                <div id="bingtuchart" style="min-width: 400px; height: 400px; max-width: 600px; margin: 0 auto"></div>
 
             </div>
         </div>
@@ -153,14 +157,18 @@
         </div>
         <div class="panel-body">
             <div style="width: 400px; height: 200px; margin:0 auto;"><canvas id="anxietychart" width="400" height="200"></canvas></div>
-            <div style="width: 400px; height: 200px; margin:0 auto;"><canvas id="chart2" width="400" height="200"></canvas></div>
             <div style="width: 400px; height: 200px; margin:0 auto;"><canvas id="chart3" width="400" height="200"></canvas></div>
             <div style="width: 400px; height: 200px; margin:0 auto;"><canvas id="chart4" width="400" height="200"></canvas></div>
+            <div style="width: 400px; height: 200px; margin:0 auto;"><canvas id="chart2" width="400" height="200"></canvas></div>
             <div style="width: 400px; height: 200px; margin:0 auto;"><canvas id="chart5" width="400" height="200"></canvas></div>
             <div style="width: 400px; height: 200px; margin:0 auto;"><canvas id="chart6" width="400" height="200"></canvas></div>
+            <!--<div style="width: 400px; height: 200px; margin:0 auto;"><canvas id="chart7" width="400" height="200"></canvas></div>-->
             <div style="width: 400px; height: 200px; margin:0 auto;"><canvas id="chart8" width="400" height="200"></canvas></div>
         </div>
     </div>
+    <%}else{%>
+      该患者没有数据
+    <%}%>
 </div>
 
 

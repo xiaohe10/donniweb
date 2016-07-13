@@ -2,49 +2,82 @@
  * Created by Administrator on 7/4/2016.
  */
 $(function(){
-    var ctx = document.getElementById("bingtuchart");
-    var data = {
-        labels: [
-            "愉悦",
-            "平静",
-            "恐惧",
-            "厌恶",
-            "愤怒",
-            "惊奇",
-            "悲伤"
-        ],
-        datasets: [
-            {
-                data: bingtudata,
-                backgroundColor: [
-                    "#FF3500",
-                    "#70E500",
-                    "#7109AA",
-                    "#666600",
-                    "#FFFF00",
-                    "#FF9900",
-                    "#33CCFF"
-                ],
-                hoverBackgroundColor: [
-                    "#FF3500",
-                    "#70E500",
-                    "#7109AA",
-                    "#666600",
-                    "#FFFF00",
-                    "#FF9900",
-                    "#33CCFF"
-                ]
-            }]
-    };
-    //And for a doughnut chart
-    var myDoughnutChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: data,
-        options: {
-            height:300,
-            widhth:400
-        }
-    });
+    var chart = new CanvasJS.Chart("bingtuchart",
+        {
+            title:false,
+            animationEnabled: true,
+            legend:{
+                verticalAlign: "center",
+                horizontalAlign: "left",
+                fontSize: 20,
+                fontFamily: "Helvetica"
+            },
+            theme: "theme2",
+            data: [
+                {
+                    type: "pie",
+                    indexLabelFontFamily: "Garamond",
+                    indexLabelFontSize: 20,
+                    indexLabel: "{label}#percent%",
+                    startAngle:-20,
+                    showInLegend: false,
+                    toolTipContent:"{label}#percent%",
+                    dataPoints: [
+                        {  y: bingtudata[0],  label: "愉悦" },
+                        {  y: bingtudata[1], label: "平静" },
+                        {  y: bingtudata[2],  label: "恐惧" },
+                        {  y: bingtudata[3],  label: "厌恶"},
+                        {  y: bingtudata[4],  label: "愤怒"},
+                        {  y: bingtudata[6],  label: "悲伤" }
+                    ]
+                }
+            ]
+        });
+    chart.render();
+
+    // var ctx = document.getElementById("bingtuchart");
+    // var data = {
+    //     labels: [
+    //         "愉悦",
+    //         "平静",
+    //         "恐惧",
+    //         "厌恶",
+    //         "愤怒",
+    //         "惊奇",
+    //         "悲伤"
+    //     ],
+    //     datasets: [
+    //         {
+    //             data: bingtudata,
+    //             backgroundColor: [
+    //                 "#FF3500",
+    //                 "#70E500",
+    //                 "#7109AA",
+    //                 "#666600",
+    //                 "#FFFF00",
+    //                 "#FF9900",
+    //                 "#33CCFF"
+    //             ],
+    //             hoverBackgroundColor: [
+    //                 "#FF3500",
+    //                 "#70E500",
+    //                 "#7109AA",
+    //                 "#666600",
+    //                 "#FFFF00",
+    //                 "#FF9900",
+    //                 "#33CCFF"
+    //             ]
+    //         }]
+    // };
+    // //And for a doughnut chart
+    // var myDoughnutChart = new Chart(ctx, {
+    //     type: 'doughnut',
+    //     data: data,
+    //     options: {
+    //         height:300,
+    //         widhth:400,
+    //     }
+    // });
 
     var ctx1 = document.getElementById("anxietychart");
     var data1 = {
@@ -238,37 +271,37 @@ $(function(){
         data: data6
     });
 
-    var ctx7 = document.getElementById("chart7");
-    var data7 = {
-        labels:["1", "2", "3", "4", "5", "6", "7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25"],
-        datasets: [
-            {
-                label: "惊奇度",
-                fill: false,
-                lineTension: 0.1,
-                backgroundColor: "rgba(75,192,192,0.4)",
-                borderColor: "#FF9900",
-                borderCapStyle: 'butt',
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderJoinStyle: 'miter',
-                pointBorderColor: "#FF9900",
-                pointBackgroundColor: "#fff",
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: "#FF9900",
-                pointHoverBorderColor: "rgba(220,220,220,1)",
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
-                pointHitRadius: 10,
-                data: surprise_trend
-            }
-        ]
-    };
-    var myLineChart7 = new Chart(ctx7, {
-        type: 'line',
-        data: data7
-    });
+    // var ctx7 = document.getElementById("chart7");
+    // var data7 = {
+    //     labels:["1", "2", "3", "4", "5", "6", "7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25"],
+    //     datasets: [
+    //         {
+    //             label: "恐惧度",
+    //             fill: false,
+    //             lineTension: 0.1,
+    //             backgroundColor: "rgba(75,192,192,0.4)",
+    //             borderColor: "#FF9900",
+    //             borderCapStyle: 'butt',
+    //             borderDash: [],
+    //             borderDashOffset: 0.0,
+    //             borderJoinStyle: 'miter',
+    //             pointBorderColor: "#FF9900",
+    //             pointBackgroundColor: "#fff",
+    //             pointBorderWidth: 1,
+    //             pointHoverRadius: 5,
+    //             pointHoverBackgroundColor: "#FF9900",
+    //             pointHoverBorderColor: "rgba(220,220,220,1)",
+    //             pointHoverBorderWidth: 2,
+    //             pointRadius: 1,
+    //             pointHitRadius: 10,
+    //             data: surprise_trend
+    //         }
+    //     ]
+    // };
+    // var myLineChart7 = new Chart(ctx7, {
+    //     type: 'line',
+    //     data: data7
+    // });
 
     var ctx8 = document.getElementById("chart8");
     var data8 = {
