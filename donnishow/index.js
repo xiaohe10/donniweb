@@ -257,7 +257,7 @@ app.get('/removePatient',function(req,res){
 app.use('/static',express.static('static'));
 
 app.set('view engine', 'ejs');
-app.listen(3000, function () {
-    console.log('donni web listening on port 3000!');
+app.listen(3002, function () {
+    console.log('donni web listening on port 3002!');
 });
 
