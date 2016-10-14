@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>懂你-医生端</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/jchartfx.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/sample.css"/>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
+
+    <link href="/static/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="/static/js/bootstrap/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+
+            </button>
+            <a class="navbar-brand" href="#">懂你-医生端</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <ol class="breadcrumb" style="padding:15px 0;margin:0 20px;">
+
+                        <li><a href="/list?doctorID=<%=doctorID%>">患者列表 <span class="sr-only">(current)</span></a></li>
+                        <li class="active"><a href="/patient?username=<%=patientID%>&doctorID=<%=doctorID%>"><%=patientName%> <span class="sr-only">(current)</span></a></li>
+                        <li class="active">GAD-7量表</li>
+                    </ol>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">医生账户<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/logout">登出</a></li>
+
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <div class="col-md-9">
+        <% if(message){ %>
+        <div class="alert <% if(message=='用户添加成功'){ %>alert-success <% }else{%> alert-danger<%}%> alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <%= message %>
+        </div>
+        <% } %>
+    </div>
+    <div class="col-md-12">
+        <form action="/test/gad7/submit" method="post">
+            <input type="hidden" name="patientID" value="<%=patientID%>">
+            <input type="hidden" name="doctorID" value="<%=doctorID%>">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>问题</th>
+                <th>没有(0)</th>
+                <th>有几天(1)</th>
+                <th>一半以上时间(2)</th>
+                <th>几乎天天(3)</th>
+            </tr>
+            </thead>
+            <tbody>
+
+                <tr> <th scope="row">感到不安、担心及烦躁</th>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q1" id="q1" value="0">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q1" id="q1" value="1">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q1" id="q1" value="2">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q1" id="q1" value="3">
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr> <th scope="row">不能停止或无法控制担心</th>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q2" id="q2" value="0">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q2" id="q2" value="1">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q2" id="q2" value="2">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q2" id="q2" value="3">
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr> <th scope="row">对各种各样的事情担忧过多  </th>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q3" id="q3" value="0">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q3" id="q3" value="1">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q3" id="q3" value="2">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q3" id="q3" value="3">
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr> <th scope="row">很紧张，很难放松下来</th>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q4" id="q4" value="0">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q4" id="q4" value="1">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q4" id="q4" value="2">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q4" id="q4" value="3">
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr> <th scope="row">非常焦躁，以至无法静坐</th>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q5" id="q5" value="0">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q5" id="q5" value="1">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q5" id="q5" value="2">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q5" id="q5" value="3">
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr> <th scope="row">变得容易烦恼或易被激怒</th>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q6" id="q6" value="0">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q6" id="q6" value="1">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q6" id="q6" value="2">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q6" id="q6" value="3">
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr> <th scope="row">感到好像有什么可怕的事会发生</th>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q7" id="q7" value="0">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q7" id="q7" value="1">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q7" id="q7" value="2">
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q7" id="q7" value="3">
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr> <th scope="row">如果发现自己有如上症状, 他们影响到你的家庭生活, 工作, 人际关系的程度是: </th>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q8" id="q8" value="0">
+                                沒有困难
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q8" id="q8" value="1">有一些困难
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q8" id="q8" value="2">很多困难
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="radio">
+                            <label>
+                                <input type="radio" name="q8" id="q8" value="3">非常困难
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody> </table>
+            <button class="btn btn-block btn-primary">提交</button>
+        </form>
+    </div>
+</div>
+
+
+</body>
+</html>
+

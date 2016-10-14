@@ -31,10 +31,22 @@ app.post('/login',function(req,res){
     username = req.body.username;
     password = req.body.password;
     console.log("user login:"+username);
-    if(username=="doctor" && password=="donni"){
-        res.redirect('/list');
+    if(username=='admin'){
+        if(password=="donni"){
+            res.redirect('/admin/doctorlist');
+        }else{
+            res.redirect('/?message=用户名或密码错误');
+        }
+
     }else{
-        res.redirect('/?message=用户名或密码错误');
+        var Doctorinfo = db.collection('doctorinfo');
+        Doctorinfo.findOne({phone:username,password:password},function(err,doctorinfo){
+            if(doctorinfo){
+                res.redirect('/list?doctorID='+username);
+            }else{
+                res.redirect('/?message=用户名或密码错误');
+            }
+        })
     }
 
 });
@@ -54,6 +66,7 @@ function timeformat(time){
 app.get('/patient', function (req, res) {
     username = req.query.username;
     groupid  = req.query.groupid;
+    doctorID=req.query.doctorID;
     var User = db.collection('users');
     User.findOne({'id':username },function(err,user){
         if(err){
@@ -139,7 +152,7 @@ app.get('/patient', function (req, res) {
                 // console.log(group.starttime,'-',group.endtime);
             }
             if(groups.length==0){
-               res.render('patient',{message:'没有数据'});
+               res.render('patient-new',{message:'没有数据',doctorID:doctorID,'user':user,'gad7':0,'phq9':0,patientName:user.username});
             }else{
                 ecgstarttime = groups[0].lefttime;
                 ecgendtime = groups[groups.length-1].rightime;
@@ -196,7 +209,7 @@ app.get('/patient', function (req, res) {
                         heart_mistakes.push({ecgDiagnosis:mis.ecgDiagnosis,time:timeformat(groupecg[t].date)})
                     }
                     bingtudata = [currEmo.joy,currEmo.clam,currEmo.fear,currEmo.disgust,currEmo.anger,currEmo.surprise,currEmo.sorrow];
-                    res.render('patient',{message:false,'anxiety_trend':anxiety_trend,
+                    res.render('patient-new',{message:false,doctorID:doctorID,'anxiety_trend':anxiety_trend,
                         "sorrow_trend":sorrow_trend,
                         surprise_trend:surprise_trend,
                         anger_trend:anger_trend,
@@ -210,34 +223,65 @@ app.get('/patient', function (req, res) {
     })
 
 });
+app.get('/test/gad7',function (req, res) {
+    doctorID=req.query.doctorID;
+    patientID=req.query.patientID;
+    patientName=req.query.patientName;
+    res.render('test_gad7',{doctorID:doctorID,patientID:patientID,patientName:patientName,message:null})
+});
+app.post('/test/gad7/submit',function (req, res) {
+    doctorID=req.body.doctorID;
+    patientID=req.body.patientID;
+    var answer = [];
+    answer[1] = req.body.q1;
+    answer[2] = req.body.q2;
+    answer[3] = req.body.q3;
+    answer[4] = req.body.q4;
+    answer[5] = req.body.q5;
+    answer[6] = req.body.q6;
+    answer[7] = req.body.q7;
 
+    finalanswer = 0;
+    for(var i =1; i < 8; i++){
+        finalanswer += parseInt(answer[i]);
+    }
+    var User = db.collection('users');
+    User.update({'id':patientID},{$set:{'gad7':finalanswer}},{upsert:true, multi: true},function(err,result){
+        res.redirect("/patient?username="+patientID+"&doctorID="+doctorID);
+    })
+
+});
 app.all('/list', function (req, res) {
     message=req.query.message;
+    doctorID=req.query.doctorID;
+
     var Doctor = db.collection('doctors');
-    var patients = [];
-    Doctor.find({'doctorID':'doctor' }).toArray(function(err,patients){
-        res.render('list',{message:message,patients:patients})
+    console.log('doctor '+doctorID+ ' list');
+    Doctor.find({'doctorID':doctorID }).toArray(function(err,patients){
+        res.render('list',{message:message,patients:patients,doctorID:doctorID})
     })
 });
 app.post('/adduser',function(req,res){
     username = req.body.username;
-    console.log("add user: "+username);
+    doctorID = req.body.doctorID;
+    console.log("add user: "+username,doctorID);
     var User = db.collection('users');
     User.findOne({'id':username },function(err,user) {
         if (err) {
             console.log("err");
         }
         if(!user){
-            res.redirect('/list?message=用户不存在');
+            res.redirect('/list?message=用户不存在&doctorID='+doctorID);
         }
         else {
             var Doctor = db.collection('doctors');
             Doctor.insert({
-                'doctorID':'doctor',
+                'doctorID':doctorID,
                 'patientID':user.id,
-                'patientName':user.username
+                'patientName':user.username,
+                'birthday':user.birthday
             })
-            res.redirect('/list?message=用户添加成功');
+            res.redirect('/list?message=用户添加成功&doctorID='+doctorID);
             console.log("patient:" + user.username);
         }
     });
@@ -248,14 +292,90 @@ app.get('/logout', function (req, res) {
 });
 app.get('/removePatient',function(req,res){
     username=req.query.username;
+    doctorID = req.query.doctorID;
     var Doctor = db.collection('doctors');
-    Doctor.deleteOne({'doctorID':'doctor','patientID':username },function(err,results){
-        res.redirect('/list');
+    console.log('delete patient',username,' by', doctorID)
+    Doctor.deleteOne({'doctorID':doctorID,'patientID':username },function(err,results){
+        res.redirect('/list?doctorID='+doctorID);
     })
 
 })
 app.use('/static',express.static('static'));
 
+app.post('/modifyUser',function(req,res){
+    userID = req.body.userID;
+    username = req.body.realname;
+    birthday = req.body.birthday;
+    doctorID= req.body.doctorID;
+    console.log("update user: "+username+" "+userID+" "+birthday);
+    var User = db.collection('users');
+
+    User.update({id:userID },{$set:{"username":username,"birthday":birthday}},{
+            upsert:true,
+        multi: true},function (err,result) {
+        if(err){
+            console.log(err);
+        }else{
+            var Doctor = db.collection('doctors');
+            Doctor.update({patientID:userID,doctorID:doctorID},{$set:{"patientName":username,"birthday":birthday}},function(err,result1){
+                res.redirect('/list?message=用户修改成功&doctorID='+doctorID);
+            })
+        }
+
+    });
+})
+app.post('/admin/modifydoctor',function(req,res){
+    phone = req.body.phone;
+    hospital = req.body.hospital;
+    name = req.body.name;
+    password = req.body.password;
+    console.log("update doctor: "+phone+" "+hospital+" "+name+" "+password);
+    var Doctorinfo = db.collection('doctorinfo');
+    Doctorinfo.update({phone:phone},{$set:{hospital:hospital,name:name,password:password}},function(err,result){
+        if(err){
+            res.redirect('/admin/doctorlist?message=医生修改失败');
+        }else{
+            res.redirect('/admin/doctorlist?message=医生修改成功');
+        }
+    })
+})
+
+app.get('/admin/doctorlist',function(req,res){
+    //doctorinfo = db.collection('doctorinfo');
+    message=req.query.message;
+    var Doctorinfo = db.collection('doctorinfo');
+    Doctorinfo.find().toArray(function(err,doctors){
+        res.render('admin',{message:message,doctors:doctors})
+    });
+});
+
+app.post('/admin/adddoctor',function(req,res){
+    hospital = req.body.hospital;
+    name = req.body.name;
+    phone = req.body.phone;
+    password = req.body.password;
+    //doctorinfo = db.collection('doctorinfo');
+    var Doctorinfo = db.collection('doctorinfo');
+    Doctorinfo.insert({
+        phone:phone,
+        hospital:hospital,
+        name:name,
+        password:password
+    })
+    res.redirect('/admin/doctorlist?message=添加成功');
+
+
+});
+
+app.get('/admin/deletedoctor',function(req,res){
+    phone = req.query.phone;
+    //doctorinfo = db.collection('doctorinfo');
+    var Doctorinfo = db.collection('doctorinfo');
+    Doctorinfo.deleteOne({'phone':phone},function(err,results){
+        res.redirect('/admin/doctorlist?message=删除成功');
+    })
+
+});
 app.set('view engine', 'ejs');
 app.listen(3002, function () {
     console.log('donni web listening on port 3002!');

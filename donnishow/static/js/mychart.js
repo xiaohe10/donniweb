@@ -12,6 +12,7 @@ $(function(){
                 fontSize: 20,
                 fontFamily: "Helvetica"
             },
+            backgroundColor: "#F5DEB3",
             theme: "theme2",
             data: [
                 {

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>懂你-医生端</title>
+   <link rel="stylesheet" type="text/css" href="/static/css/jchartfx.css"/>
+   <link rel="stylesheet" type="text/css" href="/static/css/sample.css"/>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
+    <script src="/static/js/jchartfx/jquery.js"></script>
+   <script type="text/javascript" src="/static/js/jchartfx/jchartfx.system.js"></script>
+   <script type="text/javascript" src="/static/js/jchartfx/jchartfx.coreVector.js"></script>
+   <script type="text/javascript" src="/static/js/jchartfx/jchartfx.advanced.js"></script>
+    <link href="/static/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+   <script type="text/javascript" src="/static/js/sample.js"></script>
+
+    <script src="/static/js/Chart.js"></script>
+    <script src="/static/js/mychart.js"></script>
+    <script src="/static/js/jquery.canvasjs.min.js"></script>
+    <script src="/static/js/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        <% if(!message){%>
+        var bingtudata = JSON.parse("[<%=bingtudata%>]");
+        var anxiety_trend = JSON.parse("[<%=anxiety_trend%>]");
+        var disgust_trend = JSON.parse("[<%=disgust_trend%>]");
+        var sorrow_trend = JSON.parse("[<%=sorrow_trend%>]");
+        var surprise_trend = JSON.parse("[<%=surprise_trend%>]");
+        var anger_trend = JSON.parse("[<%=anger_trend%>]");
+        var fear_trend = JSON.parse("[<%=fear_trend%>]");
+        var depress_trend = JSON.parse("[<%=depress_trend%>]");
+        var tired_trend = JSON.parse("[<%=tired_trend%>]");
+        <%}%>
+
+    </script>
+   
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+
+            </button>
+            <a class="navbar-brand" href="#">懂你-医生端</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <ol class="breadcrumb" style="padding:15px 0;margin:0 20px;">
+
+                        <li><a href="/list?doctorID=<%=doctorID%>">患者列表 <span class="sr-only">(current)</span></a></li>
+                        <li class="active">患者详情</li>
+                    </ol>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="javascript:window.print()">打印报告</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">医生账户<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/logout">登出</a></li>
+
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <div class="col-md-12">
+        <% if(!message){%>
+        <nav>
+            <ul class="pagination" style="margin:0 auto;">
+                <!--<li>-->
+                    <!--<a href="#" aria-label="Previous">-->
+                        <!--<span aria-hidden="true">&laquo;</span>-->
+                    <!--</a>-->
+                <!--</li>-->
+                <% groupcount = 0;%>
+                <% groups.forEach(function(group){%>
+                <% groupcount++;%>
+                    <li <% if(groupcount==groupid){%>class="active"<% }%>><a href="/patient?username=<%=username %>&groupid=<%=groupcount %>"><%= group.starttime %></a></li>
+                <%}); %>
+                <!--<li>-->
+                    <!--<a href="#" aria-label="Next">-->
+                        <!--<span aria-hidden="true">&raquo;</span>-->
+                    <!--</a>-->
+                <!--</li>-->
+            </ul>
+        </nav>
+        </div>
+
+
+    <!--<button onclick="restart()">重新开始</button>-->
+
+    <div class="col-md-6">
+        <div class="panel panel-success" style="margin-top:10px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">用户信息</h3>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-6">
+                    <p>账号：<%= user.id %></p>
+                    <p>姓名：<%= user.nickname %></p>
+                    <p>性别：<% if(user.gender==true ){ %> 男 <% }else {%> 女 <% }%></p>
+                    <p>出生年月：<%= user.birthday %></p>
+                </div>
+                <div class="col-md-6">
+                    <p>病史：</p>
+                    <p>无心脏病和心理疾病病史</p>
+                </div>
+
+
+            </div>
+        </div>
+        </div>
+    <div class="col-md-6">
+        <div class="panel panel-info" style="margin-top:10px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">综合情况</h3>
+            </div>
+            <div class="panel-body">
+                <p>平均心率 ： <%=usernews[curr_group.end].averageHeartbeat%> 次/分</p>
+                <p>异常次数：<%=usernews[curr_group.end].unusualTime%>次</p>
+                <p>心脏健康指数:<%=usernews[curr_group.end].heartRate%></p>
+                <p>当前情绪：<%=usernews[curr_group.end].currentEmotion%></p>
+            </div>
+        </div>
+        </div>
+    <div class="col-md-6">
+        <div class="panel panel-warning" style="margin-top:10px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">情绪饼图</h3>
+            </div>
+            <div class="panel-body" style="background-color:#F5DEB3;">
+                <div id="bingtuchart" style="width: 400px; height: 400px;margin: 0 auto"></div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-danger" style="margin-top:10px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">心率异常情况</h3>
+            </div>
+            <div class="panel-body" style="background-color:rgb(255,111,183);">
+
+                <div id="ChartDiv1" style="width: 400px; height: 390px;"></div>
+                <h4>
+                    <% heart_mistakes.forEach(function(heart_mis){%>
+                    <%=heart_mis.time%>:<%=heart_mis.ecgDiagnosis%><br/>
+                    <% });%>
+                </h4>
+            </div>
+        </div>
+        </div>
+    <div class="col-md-12">
+
+
+        <div class="panel-heading">
+            <h3 class="panel-title">情绪趋势图</h3>
+        </div>
+        <div class="panel-body">
+            <div style="width: 600px; height: 200px; margin:0 auto;"><canvas id="anxietychart" width="600" height="200"></canvas></div>
+            <div style="width: 600px; height: 200px; margin:0 auto;"><canvas id="chart3" width="600" height="200"></canvas></div>
+            <div style="width: 600px; height: 200px; margin:0 auto;"><canvas id="chart4" width="600" height="200"></canvas></div>
+            <div style="width: 600px; height: 200px; margin:0 auto;"><canvas id="chart2" width="600" height="200"></canvas></div>
+            <div style="width: 600px; height: 200px; margin:0 auto;"><canvas id="chart5" width="600" height="200"></canvas></div>
+            <div style="width: 600px; height: 200px; margin:0 auto;"><canvas id="chart6" width="600" height="200"></canvas></div>
+            <!--<div style="width: 600px; height: 200px; margin:0 auto;"><canvas id="chart7" width="600" height="200"></canvas></div>-->
+            <div style="width: 600px; height: 200px; margin:0 auto;"><canvas id="chart8" width="600" height="200"></canvas></div>
+        </div>
+    </div>
+    <%}else{%>
+    <div class="col-md-6">
+        <div class="panel panel-success" style="margin-top:10px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">用户信息</h3>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-6">
+                    <p>账号：<%= user.id %></p>
+                    <p>姓名：<%= user.nickname %></p>
+                    <p>性别：<% if(user.gender==true ){ %> 男 <% }else {%> 女 <% }%></p>
+                    <p>出生年月：<%= user.birthday %></p>
+                </div>
+                <div class="col-md-6">
+                    <p>GAD-7焦虑症量表结果:<%=user.gad7%> <a href="/test/gad7?patientName=<%=patientName%>&patientID=<%=user.id%>&doctorID=<%=doctorID%>">重新测试</a></p>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-primary" style="margin-top:10px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">综合信息</h3>
+            </div>
+            <div class="panel-body">
+                该患者没有测量数据
+            </div>
+        </div>
+    </div>
+
+    <%}%>
+</div>
+
+
+</body>
+</html>
+

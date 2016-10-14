@@ -4,11 +4,11 @@
 
 #chart .Border 
 {
-    fill: #000000;
+    fill: rgb(255,111,183);
 }        
 
 #chart .Attribute0Line {
-    stroke: #00E402;
+    stroke: #fff;
     stroke-width: 2;
 }
 
@@ -35,4 +35,24 @@
 #chart .AxisX_Text
 {
     fill: transparent;
+}
+
+ #svg-wrapper {
+     width: 500px;
+     height: 160px;
+     margin: 2em auto;
+ }
+
+svg path {
+    fill: none !important;
+    stroke: transparent !important;
+    stroke-width: 1.5px;
+}
+
+svg .axis {
+    font-size: 12px;
+}
+
+svg .axis path {
+    display: none;
 }
