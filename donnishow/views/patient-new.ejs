@@ -153,12 +153,14 @@
             </div>
             <div class="panel-body" style="background-color:rgb(255,111,183);">
 
-                <div id="ChartDiv1" style="width: 400px; height: 390px;"></div>
+                <div id="ChartDiv1" style="width: 400px; height: 330px;"></div>
                 <h4>
                     <% heart_mistakes.forEach(function(heart_mis){%>
                     <%=heart_mis.time%>:<%=heart_mis.ecgDiagnosis%><br/>
                     <% });%>
                 </h4>
+                <p style="color:white">  SDNN:143ms SDANN:156ms</p>
+                <p style="color:white">  RMSSD:39 PNN50:16.7</p>
             </div>
         </div>
         </div>

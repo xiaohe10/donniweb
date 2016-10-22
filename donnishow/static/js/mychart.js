@@ -107,9 +107,19 @@ $(function(){
             }
         ]
     };
+    var chartoption = {scales: {
+        yAxes: [{
+            ticks: {
+                max: 100,
+                min: 0,
+                stepSize: 10
+            }
+        }]
+    }};
     var myLineChart1 = new Chart(ctx1, {
         type: 'line',
-        data: data1
+        data: data1,
+        options: chartoption
     });
 
     var ctx2 = document.getElementById("chart2");
@@ -141,7 +151,8 @@ $(function(){
     };
     var myLineChart2 = new Chart(ctx2, {
         type: 'line',
-        data: data2
+        data: data2,
+        options: chartoption
     });
 
     var ctx3 = document.getElementById("chart3");
@@ -173,7 +184,7 @@ $(function(){
     };
     var myLineChart3 = new Chart(ctx3, {
         type: 'line',
-        data: data3
+        data: data3,options: chartoption
     });
 
     var ctx4 = document.getElementById("chart4");
@@ -205,7 +216,7 @@ $(function(){
     };
     var myLineChart4 = new Chart(ctx4, {
         type: 'line',
-        data: data4
+        data: data4,options: chartoption
     });
 
     var ctx5 = document.getElementById("chart5");
@@ -237,7 +248,7 @@ $(function(){
     };
     var myLineChart5 = new Chart(ctx5, {
         type: 'line',
-        data: data5
+        data: data5,options: chartoption
     });
 
     var ctx6 = document.getElementById("chart6");
@@ -269,7 +280,7 @@ $(function(){
     };
     var myLineChart6 = new Chart(ctx6, {
         type: 'line',
-        data: data6
+        data: data6,options: chartoption
     });
 
     // var ctx7 = document.getElementById("chart7");
@@ -333,6 +344,6 @@ $(function(){
     };
     var myLineChart8 = new Chart(ctx8, {
         type: 'line',
-        data: data8
+        data: data8,options: chartoption
     });
 });
