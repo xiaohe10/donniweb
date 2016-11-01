@@ -119,6 +119,7 @@ app.get('/patient', function (req, res) {
                         if(pretime < (usernew.measureTime-2)){
                             //finished
                             var newarray  = emotiongraphs.slice();
+                            newarray = newarray.reverse();
                             if(newarray.length>25){
                                 newarray = newarray.slice(newarray.length-25,newarray.length);
                             }
@@ -146,7 +147,7 @@ app.get('/patient', function (req, res) {
                             currentemotiongraph['surprise'] = currEmo.surprise;
                             currentemotiongraph['anger'] = currEmo.anger;
                             currentemotiongraph['fear'] = currEmo.fear;
-                            currentemotiongraph['clam'] = currEmo.clam;
+               w             currentemotiongraph['clam'] = currEmo.clam;
                             currentemotiongraph['joy'] = currEmo.fear;
                             emotiongraphs.push(currentemotiongraph);
                         }
@@ -154,6 +155,7 @@ app.get('/patient', function (req, res) {
                     }else{
                         //finished
                         var newarray  = emotiongraphs.slice();
+                        newarray = newarray.reverse();
                         if(newarray.length>25){
                             newarray = newarray.slice(newarray.length-25,newarray.length);
                         }
@@ -175,6 +177,7 @@ app.get('/patient', function (req, res) {
             if(groupStartIndex != groupEndIndex ){
                 //finished
                 var newarray  = emotiongraphs.slice();
+                newarray = newarray.reverse();
                 if(newarray.length>25){
                     newarray = newarray.slice(newarray.length-25,newarray.length);
                 }
@@ -222,14 +225,14 @@ app.get('/patient', function (req, res) {
                     }
                     usernew = usernews[groups[groupid-1].end];
 
-                    var currEmo = JSON.parse(usernew.allEmotions);
-                    currEmo.joy = parseInt(currEmo.joy)
-                    currEmo.clam = parseInt(currEmo.clam)
-                    currEmo.fear = parseInt(currEmo.fear)
-                    currEmo.disgust = parseInt(currEmo.disgust)
-                    currEmo.anger = parseInt(currEmo.anger)
-                    currEmo.surprise = parseInt(currEmo.surprise)
-                    currEmo.sorrow = parseInt(currEmo.sorrow)
+                    // var currEmo = JSON.parse(usernew.allEmotions);
+                    // currEmo.joy = parseInt(currEmo.joy)
+                    // currEmo.clam = parseInt(currEmo.clam)
+                    // currEmo.fear = parseInt(currEmo.fear)
+                    // currEmo.disgust = parseInt(currEmo.disgust)
+                    // currEmo.anger = parseInt(currEmo.anger)
+                    // currEmo.surprise = parseInt(currEmo.surprise)
+                    // currEmo.sorrow = parseInt(currEmo.sorrow)
                     emotiongraphs = groups[groupid-1].emotiongraphs;
                     var anxiety_trend = [];
                     var disgust_trend = [];
@@ -252,6 +255,8 @@ app.get('/patient', function (req, res) {
                         surprise_trend.push(emotiongraphs[k].surprise/EmoSum*100);
                         anger_trend.push(emotiongraphs[k].anger/EmoSum*100);
                         fear_trend.push(emotiongraphs[k].fear/EmoSum*100);
+                        var currEmo = emotiongraphs[k];
+                        piechart_data = [currEmo.joy,currEmo.clam,currEmo.fear,currEmo.disgust,currEmo.anger,currEmo.surprise,currEmo.sorrow];
 
                     }
 
@@ -263,7 +268,8 @@ app.get('/patient', function (req, res) {
                         heart_mistakes.push({ecgDiagnosis:mis.ecgDiagnosis,time:timeformat(groupecg[t].date)})
                     }
                     //piechart
-                    bingtudata = [currEmo.joy,currEmo.clam,currEmo.fear,currEmo.disgust,currEmo.anger,currEmo.surprise,currEmo.sorrow];
+
+                    //bingtudata = [currEmo.joy,currEmo.clam,currEmo.fear,currEmo.disgust,currEmo.anger,currEmo.surprise,currEmo.sorrow];
                     res.render('patient-new',{message:false,doctorID:doctorID,'anxiety_trend':anxiety_trend,
                         patientName:user.username,
                         "sorrow_trend":sorrow_trend,
@@ -272,7 +278,7 @@ app.get('/patient', function (req, res) {
                         fear_trend:fear_trend,
                         depress_trend:depress_trend,
                         "tired_trend":tired_trend,
-                        disgust_trend:disgust_trend,heart_mistakes:heart_mistakes,'groups':groups,'bingtudata':bingtudata,'curr_group':groups[groupid-1],'usernews':usernews,'user':user,'username':username,'groupid':groupid});
+                        disgust_trend:disgust_trend,heart_mistakes:heart_mistakes,'groups':groups,'bingtudata':piechart_data,'curr_group':groups[groupid-1],'usernews':usernews,'user':user,'username':username,'groupid':groupid});
                 });
             }
         });
