@@ -367,8 +367,8 @@
 }
 
 .jchartfx .AxisSection {
-	fill: #FFFFFF;
-	stroke: #FFFFFF;
+	fill: #000;
+	stroke: #000;
 }
 
 .jchartfx .PointLabel {

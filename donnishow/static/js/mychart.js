@@ -2,6 +2,8 @@
  * Created by Administrator on 7/4/2016.
  */
 $(function(){
+    alllables = ["1", "2", "3", "4", "5", "6", "7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25"];
+    alllables = alllables.slice(0,anxiety_trend.length);
     var chart = new CanvasJS.Chart("bingtuchart",
         {
             title:false,
@@ -82,7 +84,7 @@ $(function(){
 
     var ctx1 = document.getElementById("anxietychart");
     var data1 = {
-        labels: ["1", "2", "3", "4", "5", "6", "7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25"],
+        labels: alllables,
         datasets: [
             {
                 label: "焦虑度",
@@ -124,7 +126,7 @@ $(function(){
 
     var ctx2 = document.getElementById("chart2");
     var data2 = {
-        labels:["1", "2", "3", "4", "5", "6", "7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25"],
+        labels:alllables,
         datasets: [
             {
                 label: "厌恶度",
@@ -157,7 +159,7 @@ $(function(){
 
     var ctx3 = document.getElementById("chart3");
     var data3 = {
-        labels: ["1", "2", "3", "4", "5", "6", "7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25"],
+        labels: alllables,
         datasets: [
             {
                 label: "抑郁度",
@@ -189,7 +191,7 @@ $(function(){
 
     var ctx4 = document.getElementById("chart4");
     var data4 = {
-        labels: ["1", "2", "3", "4", "5", "6", "7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25"],
+        labels: alllables,
         datasets: [
             {
                 label: "疲惫度",
@@ -221,7 +223,7 @@ $(function(){
 
     var ctx5 = document.getElementById("chart5");
     var data5 = {
-        labels:["1", "2", "3", "4", "5", "6", "7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25"],
+        labels:alllables,
         datasets: [
             {
                 label: "悲伤度",
@@ -253,7 +255,7 @@ $(function(){
 
     var ctx6 = document.getElementById("chart6");
     var data6 = {
-        labels:["1", "2", "3", "4", "5", "6", "7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25"],
+        labels:alllables,
         datasets: [
             {
                 label: "愤怒度",
@@ -317,7 +319,7 @@ $(function(){
 
     var ctx8 = document.getElementById("chart8");
     var data8 = {
-        labels:["1", "2", "3", "4", "5", "6", "7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25"],
+        labels:alllables,
         datasets: [
             {
                 label: "恐惧度",

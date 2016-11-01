@@ -77,21 +77,28 @@ app.get('/patient', function (req, res) {
         }
         var Usernews = db.collection('usernews');
         var options = {
-            'limit':100
+            'limit':1000
         }
         Usernews.find({'userID':new ObjectID(user._id)},options).sort({'_id':-1}).toArray(function(err,usernews){
+            // console.log(usernews);
+
             var groups = [];
             var groupStartIndex = 0;
             var groupEndIndex = 0;
-            var endtime = null;
+            var enddate = null;
             var pretime = null;
+
+            var predate = null;
             var emotiongraphs = [];
 
             for(var i =0; i < usernews.length;i++){
                 usernew = usernews[i];
+                //console.log(usernew.measureTime);
                 if(pretime == null){
-                    pretime =  usernew.pending_date;
-                    endtime = usernew.pending_date;
+                    //console.log("init pre time "+usernew.measureTime);
+                    pretime =  usernew.measureTime;
+                    predate = usernew.pending_date;
+                    enddate = usernew.pending_date;
                     currentemotiongraph = {}
                     currentemotiongraph['anxiety'] = usernew.anxiety;
                     currentemotiongraph['depress'] = usernew.depress;
@@ -102,47 +109,85 @@ app.get('/patient', function (req, res) {
                     currentemotiongraph['surprise'] = currEmo.surprise;
                     currentemotiongraph['anger'] = currEmo.anger;
                     currentemotiongraph['fear'] = currEmo.fear;
+                    currentemotiongraph['clam'] = currEmo.clam;
+                    currentemotiongraph['joy'] = currEmo.fear;
 
                     emotiongraphs.push(currentemotiongraph);
                 }else{
-                    if((pretime-usernew.pending_date)<=600*1000){ // 如果小于10分钟认为是一次
-                        pretime = usernew.pending_date;
-                        groupStartIndex ++;
-                        currentemotiongraph = {}
-                        currentemotiongraph['anxiety'] = usernew.anxiety;
-                        currentemotiongraph['depress'] = usernew.depress;
-                        currentemotiongraph['tired'] = usernew.tired;
-                        var currEmo = JSON.parse(usernew.allEmotions);
-                        currentemotiongraph['disgust'] = currEmo.disgust;
-                        currentemotiongraph['sorrow'] = currEmo.sorrow;
-                        currentemotiongraph['surprise'] = currEmo.surprise;
-                        currentemotiongraph['anger'] = currEmo.anger;
-                        currentemotiongraph['fear'] = currEmo.fear;
-                        emotiongraphs.push(currentemotiongraph);
+                    if(usernew.measureState == "measuring"){ // 新的数据
+                        if(pretime > (usernew.measureTime-2) &&  (pretime - usernew.measureTime) < 15) continue;
+                        if(pretime < (usernew.measureTime-2)){
+                            //finished
+                            var newarray  = emotiongraphs.slice();
+                            if(newarray.length>25){
+                                newarray = newarray.slice(newarray.length-25,newarray.length);
+                            }
+                            if(newarray.length > 5){
+                                groups.push({"emotiongraphs":newarray,"start":groupStartIndex,'end':groupEndIndex,'starttime':timeformat(predate),'enddate':timeformat(enddate),'lefttime':predate,'rightime':enddate});
+                                groupStartIndex ++;
+                                groupEndIndex = groupStartIndex;
+                            }
+
+
+                            emotiongraphs = [];
+                            pretime = null;
+                            endtime = predate;
+                        }else{
+                            //console.log("add new "+usernew.measureTime);
+                            pretime = usernew.measureTime;
+                            groupStartIndex ++;
+                            currentemotiongraph = {}
+                            currentemotiongraph['anxiety'] = usernew.anxiety;
+                            currentemotiongraph['depress'] = usernew.depress;
+                            currentemotiongraph['tired'] = usernew.tired;
+                            var currEmo = JSON.parse(usernew.allEmotions);
+                            currentemotiongraph['disgust'] = currEmo.disgust;
+                            currentemotiongraph['sorrow'] = currEmo.sorrow;
+                            currentemotiongraph['surprise'] = currEmo.surprise;
+                            currentemotiongraph['anger'] = currEmo.anger;
+                            currentemotiongraph['fear'] = currEmo.fear;
+                            currentemotiongraph['clam'] = currEmo.clam;
+                            currentemotiongraph['joy'] = currEmo.fear;
+                            emotiongraphs.push(currentemotiongraph);
+                        }
+
                     }else{
+                        //finished
                         var newarray  = emotiongraphs.slice();
                         if(newarray.length>25){
                             newarray = newarray.slice(newarray.length-25,newarray.length);
                         }
+                        if(newarray.length > 5){
+                            groups.push({"emotiongraphs":newarray,"start":groupStartIndex,'end':groupEndIndex,'starttime':timeformat(predate),'endtime':timeformat(enddate),'lefttime':predate,'rightime':enddate});
+                            groupStartIndex ++;
+                            groupEndIndex = groupStartIndex;
+                        }
+
+
                         emotiongraphs = [];
-                        groups.push({"emotiongraphs":newarray,"start":groupStartIndex,'end':groupEndIndex,'starttime':timeformat(pretime),'endtime':timeformat(endtime),'lefttime':pretime,'rightime':endtime});
-                        pretime = usernew.pending_date;
-                        groupStartIndex ++;
-                        groupEndIndex = groupStartIndex;
-                        endtime = pretime;
+                        pretime = null;
+                        enddate = predate;
                     }
                 }
 
                 // console.log(usernew.pending_date);
             }
             if(groupStartIndex != groupEndIndex ){
+                //finished
                 var newarray  = emotiongraphs.slice();
                 if(newarray.length>25){
                     newarray = newarray.slice(newarray.length-25,newarray.length);
                 }
+                if(newarray.length > 5){
+                    groups.push({"emotiongraphs":newarray,"start":groupStartIndex,'end':groupEndIndex,'starttime':timeformat(predate),'endtime':timeformat(endtime),'lefttime':predate,'rightime':endtime});
+                    groupStartIndex ++;
+                    groupEndIndex = groupStartIndex;
+                }
 
-                emotiongraphs= [];
-                groups.push({"emotiongraphs":newarray,"start":groupStartIndex,'end':groupEndIndex,'starttime':timeformat(pretime),'endtime':timeformat(endtime),'lefttime':pretime,'rightime':endtime});
+
+                emotiongraphs = [];
+                pretime = null;
+                endtime = pretime;
             }
             groups = groups.slice(0,5).reverse();
             // console.log(groups);
@@ -178,6 +223,13 @@ app.get('/patient', function (req, res) {
                     usernew = usernews[groups[groupid-1].end];
 
                     var currEmo = JSON.parse(usernew.allEmotions);
+                    currEmo.joy = parseInt(currEmo.joy)
+                    currEmo.clam = parseInt(currEmo.clam)
+                    currEmo.fear = parseInt(currEmo.fear)
+                    currEmo.disgust = parseInt(currEmo.disgust)
+                    currEmo.anger = parseInt(currEmo.anger)
+                    currEmo.surprise = parseInt(currEmo.surprise)
+                    currEmo.sorrow = parseInt(currEmo.sorrow)
                     emotiongraphs = groups[groupid-1].emotiongraphs;
                     var anxiety_trend = [];
                     var disgust_trend = [];
@@ -187,20 +239,22 @@ app.get('/patient', function (req, res) {
                     var fear_trend = [];
                     var depress_trend = [];
                     var tired_trend=[];
-                    var EmoSum = currEmo.joy+currEmo.clam+currEmo.fear+currEmo.disgust+currEmo.anger+currEmo.surprise+currEmo.sorrow;
-                    if(EmoSum == 0){
-                        EmoSum = 1;
-                    }
+
                     for(var k = 0; k < emotiongraphs.length;k++){
                         anxiety_trend.push(emotiongraphs[k].anxiety);
-                        disgust_trend.push(emotiongraphs[k].disgust);
+                        depress_trend.push(emotiongraphs[k].depress);
+                        tired_trend.push(emotiongraphs[k].tired);
+
+                        var EmoSum = parseInt(emotiongraphs[k].joy)+parseInt(emotiongraphs[k].clam)+parseInt(emotiongraphs[k].fear)+parseInt(emotiongraphs[k].disgust)+parseInt(emotiongraphs[k].anger)+parseInt(emotiongraphs[k].surprise)+parseInt(emotiongraphs[k].sorrow);
+                        if(EmoSum <=0 ) EmoSum = 1;
+                        disgust_trend.push(emotiongraphs[k].disgust/EmoSum*100);
                         sorrow_trend.push(emotiongraphs[k].sorrow/EmoSum*100);
                         surprise_trend.push(emotiongraphs[k].surprise/EmoSum*100);
                         anger_trend.push(emotiongraphs[k].anger/EmoSum*100);
                         fear_trend.push(emotiongraphs[k].fear/EmoSum*100);
-                        depress_trend.push(emotiongraphs[k].depress);
-                        tired_trend.push(emotiongraphs[k].tired/EmoSum*100);
+
                     }
+
                     var heart_mistakes = [];
                     var groupecg = groups[groupid-1].ecg;
                     for(var t =0 ; t < groupecg.length;t++){
@@ -208,8 +262,10 @@ app.get('/patient', function (req, res) {
                         mis = JSON.parse(mis);
                         heart_mistakes.push({ecgDiagnosis:mis.ecgDiagnosis,time:timeformat(groupecg[t].date)})
                     }
+                    //piechart
                     bingtudata = [currEmo.joy,currEmo.clam,currEmo.fear,currEmo.disgust,currEmo.anger,currEmo.surprise,currEmo.sorrow];
                     res.render('patient-new',{message:false,doctorID:doctorID,'anxiety_trend':anxiety_trend,
+                        patientName:user.username,
                         "sorrow_trend":sorrow_trend,
                         surprise_trend:surprise_trend,
                         anger_trend:anger_trend,
