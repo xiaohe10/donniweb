@@ -147,7 +147,7 @@ app.get('/patient', function (req, res) {
                             currentemotiongraph['surprise'] = currEmo.surprise;
                             currentemotiongraph['anger'] = currEmo.anger;
                             currentemotiongraph['fear'] = currEmo.fear;
-               w             currentemotiongraph['clam'] = currEmo.clam;
+                            currentemotiongraph['clam'] = currEmo.clam;
                             currentemotiongraph['joy'] = currEmo.fear;
                             emotiongraphs.push(currentemotiongraph);
                         }

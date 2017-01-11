@@ -1,0 +1,13 @@
+@media print {
+    .noprint {display:none !important;}
+    a:link:after, a:visited:after {
+        display: none;
+        content: "";
+    }
+    #chartback1{
+        background-color:#F5DEB3 !important;
+    }
+}
+.canvasjs-chart-credit{
+    display: none;
+}
